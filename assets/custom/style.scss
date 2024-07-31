@@ -1,3 +1,16 @@
+/// |----------------------------------------
+/// | COLOR VARIABLES
+/// |----------------------------------------
+$theme-white: #dddcdc;
+$theme-white-overlay: #dddcdc45;
+$theme-dark: #343434;
+$theme-dark-overlay: #3434344f;
+$theme-box-shadow: 0px 7px 14px 0px #00000078;
+$theme-red: #b73e3e;
+
+/// |----------------------------------------
+/// | STYLING
+/// |----------------------------------------
 * {
 	user-select: none !important;
 }
@@ -9,8 +22,8 @@
 	right: -80px;
 	padding: 20px 80px;
 	text-align: center;
-	background-color: #b73e3e;
-	color: #dcdcdc;
+	background-color: $theme-red;
+	color: $theme-white;
 	z-index: 20000;
 	transform: rotate(45deg);
 }
@@ -33,9 +46,9 @@ body {
 		height: 100%;
 		padding: 10px 20px;
 		border-radius: 4px;
-		color: #dddcdc;
-		border: 1px solid #dddcdc45;
-		box-shadow: 0px 7px 14px 0px #00000078;
+		color: $theme-white;
+		border: 1px solid $theme-white-overlay;
+		box-shadow: $theme-box-shadow;
 		transition: all 0.25s ease-in;
 		font-size: 0.8rem;
 
@@ -66,54 +79,78 @@ body {
 			.timer_icon {
 				font-size: 1.5rem;
 			}
-
-			.timer_btn {
-				display: flex;
-				flex-direction: row;
-				justify-content: start;
-				align-items: center;
-				min-width: 45px;
-				padding: 10px;
-
-				.primary {
-				}
-			}
 		}
 
-		.description {
-			border-left: 3px solid #dddcdc;
+		.timer_desc {
+			border-left: 3px solid $theme-white;
 			border-radius: 3px;
 			padding: 0px 8px;
+		}
+
+		.timer_btn_container {
+			margin-top: 10px;
+			display: flex;
+			justify-content: end;
+			align-items: center;
+			width: 100%;
+			gap: 5px;
+
+			.btn {
+				min-width: 45px;
+			}
+		}
+	}
+
+	.modal-content {
+		background-color: $theme-dark;
+		color: $theme-white;
+		border: 1px solid $theme-white-overlay;
+
+		.modal-header {
+			border-bottom: 1px solid $theme-white-overlay;
+		}
+
+		.modal-footer {
+			border-top: 1px solid $theme-white-overlay;
 		}
 	}
 
 	&.dark {
-		background-color: #343434;
+		background-color: $theme-dark;
 
 		.counter {
-			color: #dddcdc;
+			color: $theme-white;
 		}
 	}
 
 	&.light {
-		background-color: #dddcdc;
+		background-color: $theme-white;
 
 		.panel {
-			color: #343434;
-			border: 1px solid #3434344f;
+			color: $theme-dark;
+			border: 1px solid $theme-dark-overlay;
 
-			.description {
-				border-left: 3px solid #343434;
-			}
-
-			.timer {
-				.timer_btn {
-				}
+			.timer_desc {
+				border-left: 3px solid $theme-dark;
 			}
 		}
 
 		.counter {
-			color: #343434;
+			color: $theme-dark;
+		}
+
+		.modal-content {
+			background-color: $theme-white;
+			color: $theme-dark;
+			border: 1px solid $theme-dark-overlay;
+
+			.modal-header {
+				border-bottom: 1px solid $theme-dark-overlay;
+			}
+
+			.modal-footer {
+				border-top: 1px solid $theme-dark-overlay;
+			}
 		}
 	}
 }
@@ -172,4 +209,10 @@ body {
 		bottom: auto;
 		right: 10px;
 	}
+}
+
+.textarea_custom {
+	width: 100%;
+	overflow: hidden;
+	resize: none;
 }
