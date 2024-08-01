@@ -43,27 +43,26 @@
     <!-- timer row -->
     <div id="timer_container" class="row g-3">
 
-      <div id="timer_indexID" data-index="indexID" class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div id="timer_1" data-index="1" class="col-12 col-sm-6 col-md-4 col-lg-3">
         <div class="panel">
 
           <div class="timer">
             <div class="timer_icon"><i class="fa fa-clock me-2"></i></div>
-            <div id="timer_text_indexID" data-index="indexID" class="timer_text">00:00:00</div>
+            <div id="timer_text_1" data-index="1" class="timer_text">00:00:00</div>
           </div>
 
-          <div id="timer_desc_indexID" data-index="indexID" class="timer_desc">
+          <div id="timer_desc_1" data-index="1" class="timer_desc">
             Your description for this timer...
           </div>
 
-          <div id="timer_btn_container_indexID" data-index="indexID" class="timer_btn_container config">
-            <div id="btn_stop_indexID" data-index="indexID" class="btn btn-sm btn-danger d-none">
+          <div id="timer_btn_container_1" data-index="1" class="timer_btn_container config">
+            <div id="btn_stop_1" data-index="1" class="btn btn-sm btn-danger d-none">
               <i class="fas fa-square"></i>
             </div>
-            <div id="btn_snooze_indexID" data-index="indexID" class="btn btn-sm btn-info d-none">
+            <div id="btn_snooze_1" data-index="1" class="btn btn-sm btn-info d-none">
               <i class="fas fa-undo-alt"></i>
             </div>
-            <div id="btn_config_indexID" data-index="indexID" class="btn btn-sm btn-secondary"
-              onclick="modal_config(`indexID`)">
+            <div id="btn_config_1" data-index="1" class="btn btn-sm btn-secondary" onclick="modalConfig(`1`)">
               <i class="fas fa-cog"></i>
             </div>
           </div>
@@ -72,7 +71,7 @@
       </div>
 
       <div id="timer_add" class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="panel clickable" onclick="add_new_timer()">
+        <div class="panel clickable" onclick="addNewTimer()">
           <div class="add_new_btn">
             <i class="fas fa-plus"></i>
           </div>
@@ -109,18 +108,27 @@
             <div class="row g-1">
 
               <div class="col-4">
-                <input id="input_timer_h" type="number" step="1" class="form-control form-control-sm input_timer_value"
-                  placeholder="Hour">
+                <div class="input-group input-group-sm">
+                  <div class="input-group-text">Hour</div>
+                  <input id="input_timer_h" type="number" step="1" class="form-control form-control-sm text-end"
+                    placeholder="Hour">
+                </div>
               </div>
 
               <div class="col-4">
-                <input id="input_timer_m" type="number" step="1" class="form-control form-control-sm input_timer_value"
-                  placeholder="Min">
+                <div class="input-group input-group-sm">
+                  <div class="input-group-text">Min</div>
+                  <input id="input_timer_m" type="number" step="1" class="form-control form-control-sm text-end"
+                    placeholder="Min">
+                </div>
               </div>
 
               <div class="col-4">
-                <input id="input_timer_s" type="number" step="1" class="form-control form-control-sm input_timer_value"
-                  placeholder="Sec">
+                <div class="input-group input-group-sm">
+                  <div class="input-group-text">Sec</div>
+                  <input id="input_timer_s" type="number" step="1" class="form-control form-control-sm text-end"
+                    placeholder="Sec">
+                </div>
               </div>
 
             </div>
@@ -139,7 +147,6 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-sm btn-primary" onclick="">Save changes</button>
       </div>
     </div>
@@ -198,22 +205,32 @@
     }
   }
 
-  function textarea_auto_resize() {
-    console.log('function textarea_auto_resize running!');
+  function textareaAutoResize() {
+    console.log('function textareaAutoResize running!');
     this.style.height = 'auto';
     this.style.height = `${this.scrollHeight}px`;
   }
 
-  function modal_config(indexID) {
+  function modalConfig(indexID) {
     let show_template = true;
 
-    let value_timer = timer_data[indexID]?.timer ?? '00:00:00';
+    let value_timer = timer_data[indexID]?.timer ?? 0;
     let value_desc = timer_data[indexID]?.desc ?? '';
+
+    $('#input_timer_index_id').val(indexID);
+    $('#input_timer_value').val(value_timer);
+
+    let individual_timer = totalToIndividualTimer(value_timer);
+    $('#input_timer_h').val(individual_timer['h'] * 1);
+    $('#input_timer_m').val(individual_timer['m'] * 1);
+    $('#input_timer_s').val(individual_timer['s'] * 1);
+
+    $('#input_timer_desc').val(value_desc);
 
     $('#bootstrap_modal').modal('show');
   }
 
-  function add_new_timer() {
+  function addNewTimer() {
     console.log('adding new timer to the list!');
   }
 
@@ -235,20 +252,20 @@
     if (hide_modal) $('#bootstrap_modal').modal('hide');
   }
 
-  function submit_config_changes(indexID) {
+  function submitConfigChanges(indexID) {
     let timer = $('#input_timer_value').val() ?? 0;
     let desc = $('#input_timer_desc').val() ?? 'Default timer for the app.';
-    init_form_config();
+    init_form_config(true);
   }
 
-  function total_to_individual_timer(total_value) {
+  function totalToIndividualTimer(total_value) {
     total_value = total_value * 1;
 
     // Calculate hours, minutes, and seconds
-    let h = Math.floor(total_value / 3600);
+    let h = Math.floor(total_value / 3600) ?? 0;
     total_value = total_value % 3600; // Remaining seconds after extracting hours
-    let m = Math.floor(total_value / 60);
-    let s = total_value % 60; // Remaining seconds after extracting minutes
+    let m = Math.floor(total_value / 60) ?? 0;
+    let s = total_value % 60 ?? 0; // Remaining seconds after extracting minutes
 
     return {
       h: h,
@@ -257,7 +274,7 @@
     };
   }
 
-  function recalculate_timer_input() {
+  function recalculateTimerInput() {
     const h_element = $('#input_timer_h');
     const m_element = $('#input_timer_m');
     const s_element = $('#input_timer_s');
@@ -266,7 +283,7 @@
     let m = m_element.val() ?? 0;
     let s = s_element.val() ?? 0;
 
-    let total = (h * 3600) + (m * 60) + (s * 1);
+    let total = Math.floor((h * 3600) + (m * 60) + (s * 1));
     $('#input_timer_value').val(total);
   }
 
@@ -275,42 +292,42 @@
     initApp();
 
     // init scrollInput height
-    $('#ta_description_1').on('input', textarea_auto_resize);
+    $('#ta_description_1').on('input', textareaAutoResize);
 
     // listener for each timer condition
     $('#input_timer_h').on('input', function (e) {
-      recalculate_timer_input();
+      recalculateTimerInput();
       let current_value = $(this).val() ?? 0;
       if (current_value < 0) {
         console.log('hour less than 0');
         $(this).val(0);
-        recalculate_timer_input();
+        recalculateTimerInput();
       }
     });
     $('#input_timer_m').on('input', function (e) {
-      recalculate_timer_input();
+      recalculateTimerInput();
       let current_value = $(this).val() ?? 0;
       if (current_value < 0) {
         console.log('minute less than 0');
         $(this).val(0);
-        recalculate_timer_input();
+        recalculateTimerInput();
       } else if (current_value > 59) {
         console.log('minute more than 59');
         $(this).val(59);
-        recalculate_timer_input();
+        recalculateTimerInput();
       }
     });
     $('#input_timer_s').on('input', function (e) {
-      recalculate_timer_input();
+      recalculateTimerInput();
       let current_value = $(this).val() ?? 0;
       if (current_value < 0) {
         console.log('second less than 0');
         $(this).val(0);
-        recalculate_timer_input();
+        recalculateTimerInput();
       } else if (current_value > 59) {
         console.log('second more than 59');
         $(this).val(59);
-        recalculate_timer_input();
+        recalculateTimerInput();
       }
     });
   });

@@ -184,4 +184,8 @@ body.light .modal-content .modal-footer {
   width: 100%;
   overflow: hidden;
   resize: none;
+}
+
+label {
+  font-weight: 600;
 }/*# sourceMappingURL=style.css.map */
